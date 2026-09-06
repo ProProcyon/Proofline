@@ -71,11 +71,26 @@ function solveGeometry(text) {
     formula = `π × ${first}² = ${formatNumber(result)}`;
     title = "Circle area";
     explanation = "For a circle, square the radius and multiply by π.";
+  } else if (/(circle|disk)/.test(normalized) && /(perimeter|circumference|around)/.test(normalized)) {
+    result = 2 * Math.PI * first;
+    formula = `2 × π × ${first} = ${formatNumber(result)}`;
+    title = "Circle circumference";
+    explanation = "A circle's perimeter is called its circumference: multiply 2, π, and the radius.";
   } else if (/(triangle)/.test(normalized) && /(area)/.test(normalized) && second !== undefined) {
     result = first * second / 2;
     formula = `(${first} × ${second}) ÷ 2 = ${formatNumber(result)}`;
     title = "Triangle area";
     explanation = "A triangle's area is half of its base multiplied by its height.";
+  } else if (/(triangle)/.test(normalized) && /(perimeter)/.test(normalized) && numbers.length >= 3) {
+    result = numbers[0] + numbers[1] + numbers[2];
+    formula = `${numbers[0]} + ${numbers[1]} + ${numbers[2]} = ${formatNumber(result)}`;
+    title = "Triangle perimeter";
+    explanation = "Add the lengths of all three sides to find a triangle's perimeter.";
+  } else if (/(square)/.test(normalized) && /(perimeter|around)/.test(normalized)) {
+    result = 4 * first;
+    formula = `4 × ${first} = ${formatNumber(result)}`;
+    title = "Square perimeter";
+    explanation = "A square has four equal sides, so multiply one side by 4.";
   } else if (/(rectangle|rectangular)/.test(normalized) && /(area)/.test(normalized) && second !== undefined) {
     result = first * second;
     formula = `${first} × ${second} = ${formatNumber(result)}`;
@@ -89,9 +104,10 @@ function solveGeometry(text) {
   } else {
     return null;
   }
-  return { title, answer: `${formatNumber(result)} square units`, steps: [
+  const unitLabel = /(area)/i.test(title) ? "square units" : "units";
+  return { title, answer: `${formatNumber(result)} ${unitLabel}`, steps: [
     { text: explanation, math: formula },
-    { text: "Attach square units because this calculation measures space or area.", math: `Answer = ${formatNumber(result)} square units` }
+    { text: `The answer is measured in ${unitLabel} because this is a ${unitLabel === "square units" ? "space" : "distance"} measurement.`, math: `Answer = ${formatNumber(result)} ${unitLabel}` }
   ] };
 }
 
