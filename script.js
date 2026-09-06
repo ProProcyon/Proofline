@@ -2,6 +2,26 @@ const questionInput = document.querySelector("#question");
 const solveButton = document.querySelector("#solve");
 const emptyState = document.querySelector("#empty-state");
 const solution = document.querySelector("#solution");
+const coinBalance = document.querySelector("#coin-balance");
+const backgroundColor = document.querySelector("#background-color");
+const colorSwatch = document.querySelector(".color-swatch");
+
+let coins = Number(localStorage.getItem("proofline-coins") || 0);
+let savedColor = localStorage.getItem("proofline-background") || "#f7f8f4";
+
+function updateWallet() {
+  coinBalance.textContent = coins;
+}
+
+function setBackground(color) {
+  document.documentElement.style.setProperty("--paper", color);
+  backgroundColor.value = color;
+  colorSwatch.style.background = color;
+  localStorage.setItem("proofline-background", color);
+}
+
+updateWallet();
+setBackground(savedColor);
 
 function formatNumber(value) {
   if (Number.isInteger(value)) return String(value);
@@ -271,12 +291,27 @@ function render(result) {
 }
 
 function solve() {
+  coins += 10;
+  localStorage.setItem("proofline-coins", coins);
+  updateWallet();
   const result = solveQuestion(questionInput.value);
   if (result) return render(result);
   emptyState.hidden = true;
   solution.hidden = false;
   solution.innerHTML = `<div class="solution-head"><div><p class="solution-kicker">let's unpack that</p><h2>One more detail needed</h2></div><div class="answer-value">?</div></div><p class="steps-title">Try a supported format</p><p class="error">I can patiently walk through word problems, fractions, geometry, percentages, and equations. Try <strong>Mia has 7 stickers and gets 5 more</strong>, <strong>3/4 + 1/8</strong>, or <strong>4x − 9 = 2x + 7</strong>.</p>`;
 }
+
+backgroundColor.addEventListener("change", () => {
+  if (coins < 10) {
+    backgroundColor.value = savedColor;
+    return;
+  }
+  coins -= 10;
+  savedColor = backgroundColor.value;
+  localStorage.setItem("proofline-coins", coins);
+  updateWallet();
+  setBackground(savedColor);
+});
 
 solveButton.addEventListener("click", solve);
 questionInput.addEventListener("keydown", (event) => {
