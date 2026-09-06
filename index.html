@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Proofline | Math, explained</title>
+    <meta name="description" content="A calm math tutor that shows every step." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="." aria-label="Proofline home">
+          <span class="brand-mark">∑</span>
+          <span>proofline</span>
+        </a>
+        <div class="status"><span class="status-dot"></span>ready to reason</div>
+      </header>
+
+      <section class="hero" aria-labelledby="page-title">
+        <div class="eyebrow"><span></span>your patient math companion</div>
+        <h1 id="page-title">Answers you can<br /><em>follow.</em></h1>
+        <p class="hero-copy">Ask a math question in your own words. We’ll solve it carefully, then show the thinking behind every move.</p>
+      </section>
+
+      <section class="workspace" aria-label="Math problem workspace">
+        <div class="prompt-panel">
+          <label for="question">Your question</label>
+          <textarea id="question" rows="3" placeholder="Try: Solve 3x + 7 = 22" spellcheck="false"></textarea>
+          <div class="prompt-footer">
+            <div class="suggestions" aria-label="Example questions">
+              <button type="button" class="suggestion" data-question="What is 18% of 250?">18% of 250</button>
+              <button type="button" class="suggestion" data-question="Solve 3x + 7 = 22">3x + 7 = 22</button>
+              <button type="button" class="suggestion" data-question="What is 12 × 8 - 15?">12 × 8 − 15</button>
+              <button type="button" class="suggestion" data-question="What is 3/4 + 1/8?">3/4 + 1/8</button>
+              <button type="button" class="suggestion" data-question="Find the area of a triangle with base 8 and height 5">triangle area</button>
+              <button type="button" class="suggestion" data-question="Mia has 7 stickers and gets 5 more. How many stickers does she have altogether?">word problem</button>
+            </div>
+            <button class="solve-button" id="solve" type="button"><span>Explain it</span><span class="button-arrow">↗</span></button>
+          </div>
+          <p class="input-hint"><kbd>Enter</kbd> to solve <span>•</span> <kbd>Shift</kbd> + <kbd>Enter</kbd> for a new line</p>
+        </div>
+
+        <div class="answer-panel" id="answer-panel" aria-live="polite">
+          <div class="empty-state" id="empty-state">
+            <div class="orbit-icon"><span>?</span></div>
+            <h2>Your solution will appear here</h2>
+            <p>Every answer includes the result, the method, and the reasoning in plain language.</p>
+          </div>
+          <div class="solution" id="solution" hidden></div>
+        </div>
+      </section>
+
+      <footer class="footer"><span>Built for understanding, not just answers.</span><span class="footer-note">No question is too basic.</span></footer>
+    </main>
+    <script src="script.js"></script>
+  </body>
+</html>
