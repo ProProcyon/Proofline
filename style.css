@@ -17,6 +17,9 @@ button, textarea { font: inherit; }
 button { cursor: pointer; }
 .app-shell { position: relative; width: min(1120px, calc(100% - 48px)); margin: auto; padding: 30px 0 26px; }
 .topbar, .footer { display: flex; align-items: center; justify-content: space-between; }
+.topbar-tools { display: flex; align-items: center; gap: 22px; }
+.coin-wallet { display: flex; align-items: center; gap: 7px; color: var(--ink); font-family: "DM Mono", monospace; font-size: 11px; font-weight: 500; }
+.coin-icon { display: grid; width: 17px; height: 17px; place-items: center; border: 2px solid #d19c3b; border-radius: 50%; color: #d19c3b; font-size: 7px; }
 .brand { display: flex; align-items: center; gap: 10px; color: var(--ink); font-size: 15px; font-weight: 800; letter-spacing: -.04em; text-decoration: none; }
 .brand-mark { display: grid; width: 30px; height: 30px; place-items: center; color: white; background: var(--ink); border-radius: 8px 8px 8px 2px; font-family: Georgia, serif; font-size: 20px; }
 .status, .eyebrow, .input-hint, .footer { color: var(--muted); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
@@ -44,6 +47,13 @@ textarea::placeholder { color: #b9c4be; }
 .solve-button:hover { background: #d96546; }
 .input-hint { margin: 22px 0 0; font-size: 9px; letter-spacing: .04em; text-transform: none; }
 kbd { padding: 2px 5px; border: 1px solid var(--line); border-radius: 3px; background: #fff; font-family: "DM Mono", monospace; font-size: 9px; }
+.customize-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 22px; padding-top: 15px; border-top: 1px solid var(--line); }
+.customize-row div { display: flex; flex-direction: column; gap: 4px; }
+.customize-row strong { font-size: 11px; }
+.customize-row span { color: var(--muted); font-size: 10px; }
+.color-picker { position: relative; display: block; width: 30px; height: 30px; cursor: pointer; }
+.color-picker input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.color-swatch { display: block; width: 30px; height: 30px; border: 3px solid white; border-radius: 50%; background: var(--paper); box-shadow: 0 0 0 1px var(--line); }
 .empty-state { display: flex; height: 100%; min-height: 330px; flex-direction: column; align-items: flex-start; justify-content: flex-start; padding-top: 32px; }
 .orbit-icon { display: grid; width: 52px; height: 52px; place-items: center; margin-bottom: 28px; border: 1px solid #50655c; border-radius: 50%; color: var(--mint); font-family: Georgia, serif; font-size: 24px; }
 .orbit-icon::after { content: ""; position: absolute; width: 66px; height: 24px; border: 1px solid #50655c; border-radius: 50%; transform: rotate(-35deg); }
@@ -71,4 +81,6 @@ h2 { margin: 0 0 10px; font-size: 21px; letter-spacing: -.04em; }
   .prompt-footer { align-items: stretch; flex-direction: column; }
   .solve-button { justify-content: space-between; }
   .footer { align-items: flex-start; flex-direction: column; gap: 8px; }
+  .topbar-tools { gap: 10px; }
+  .status { display: none; }
 }
