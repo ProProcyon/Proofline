@@ -17,7 +17,10 @@
           <span class="brand-mark">∑</span>
           <span>proofline</span>
         </a>
-        <div class="status"><span class="status-dot"></span>ready to reason</div>
+        <div class="topbar-tools">
+          <div class="coin-wallet" aria-live="polite"><span class="coin-icon">●</span><span id="coin-balance">0</span> coins</div>
+          <div class="status"><span class="status-dot"></span>ready to reason</div>
+        </div>
       </header>
 
       <section class="hero" aria-labelledby="page-title">
@@ -43,6 +46,10 @@
             <button class="solve-button" id="solve" type="button"><span>Explain it</span><span class="button-arrow">↗</span></button>
           </div>
           <p class="input-hint"><kbd>Enter</kbd> to solve <span>•</span> <kbd>Shift</kbd> + <kbd>Enter</kbd> for a new line</p>
+          <div class="customize-row">
+            <div><strong>Customize background</strong><span>Spend 10 coins per change</span></div>
+            <label class="color-picker" title="Choose a background color"><input id="background-color" type="color" value="#f7f8f4" aria-label="Choose a background color" /><span class="color-swatch"></span></label>
+          </div>
         </div>
 
         <div class="answer-panel" id="answer-panel" aria-live="polite">
