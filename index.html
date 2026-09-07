@@ -31,9 +31,10 @@
 
       <section class="workspace" aria-label="Math problem workspace">
         <div class="prompt-panel">
-          <label for="question">Your question</label>
-          <textarea id="question" rows="3" placeholder="Try: Solve 3x + 7 = 22" spellcheck="false"></textarea>
-          <div class="prompt-footer">
+          <form id="question-form">
+            <label for="question">Your question</label>
+            <textarea id="question" rows="3" placeholder="Try: Solve 3x + 7 = 22" spellcheck="false"></textarea>
+            <div class="prompt-footer">
             <div class="suggestions" aria-label="Example questions">
               <button type="button" class="suggestion" data-question="What is 18% of 250?">18% of 250</button>
               <button type="button" class="suggestion" data-question="Solve 3x + 7 = 22">3x + 7 = 22</button>
@@ -43,9 +44,10 @@
               <button type="button" class="suggestion" data-question="Mia has 7 stickers and gets 5 more. How many stickers does she have altogether?">word problem</button>
               <button type="button" class="suggestion" data-question="What is the perimeter of a rectangle with length 8 and width 3?">rectangle perimeter</button>
             </div>
-            <button class="solve-button" id="solve" type="button"><span>Explain it</span><span class="button-arrow">↗</span></button>
-          </div>
-          <p class="input-hint"><kbd>Enter</kbd> to solve <span>•</span> <kbd>Shift</kbd> + <kbd>Enter</kbd> for a new line</p>
+              <button class="solve-button" id="solve" type="submit"><span>Explain it</span><span class="button-arrow">↗</span></button>
+            </div>
+            <p class="input-hint"><kbd>Enter</kbd> to solve <span>•</span> <kbd>Shift</kbd> + <kbd>Enter</kbd> for a new line</p>
+          </form>
           <div class="customize-row">
             <div><strong>Customize background</strong><span>Spend 10 coins per change</span></div>
             <label class="color-picker" title="Choose a background color"><input id="background-color" type="color" value="#f7f8f4" aria-label="Choose a background color" /><span class="color-swatch"></span></label>
@@ -64,6 +66,4 @@
         </div>
       </section>
 
-      <footer class="footer"><span>Built for understanding, not just answers.</span><span class="footer-note">No question is too basic.</span></footer>
-    </main>
-    <sc
+      <
