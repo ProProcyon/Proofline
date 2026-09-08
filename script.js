@@ -4,8 +4,9 @@ const solveButton = document.querySelector("#solve");
 const emptyState = document.querySelector("#empty-state");
 const solution = document.querySelector("#solution");
 const coinBalance = document.querySelector("#coin-balance");
-const backgroundColor = document.querySelector("#background-color");
-const colorSwatch = document.querySelector(".color-swatch");
+const colorMenu = document.querySelector(".color-menu");
+const colorMenuToggle = document.querySelector(".color-menu-toggle");
+const colorChoices = document.querySelectorAll(".color-choice");
 const quizLaunch = document.querySelector("#quiz-launch");
 const quizPanel = document.querySelector("#quiz-panel");
 
@@ -15,11 +16,29 @@ let quizIndex = 0;
 let quizScore = 0;
 let quizAnswered = false;
 
-const quizQuestions = [
-  { prompt: "Solve: x + 7 = 7 + 7", answer: "7", explanation: "Add the constants on the right: 7 + 7 = 14, then subtract 7 from both sides. So x = 7." },
-  { prompt: "A rectangle is 8 units long and 3 units wide. What is its perimeter?", answer: "22", explanation: "A rectangle's perimeter is 2 × (length + width), so 2 × (8 + 3) = 22 units." },
-  { prompt: "What is 3/4 + 1/8? Give your answer as a fraction.", answer: "7/8", explanation: "Convert 3/4 to 6/8, then add: 6/8 + 1/8 = 7/8." }
-];
+let quizQuestions = [];
+
+function randomWhole(minimum, maximum) {
+  return Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
+}
+
+function createQuizQuestions() {
+  const equationConstant = randomWhole(3, 12);
+  const equationRight = randomWhole(10, 25);
+  const rectangleLength = randomWhole(5, 14);
+  const rectangleWidth = randomWhole(2, 8);
+  const fractionDenominator = [4, 5, 6, 8, 10][randomWhole(0, 4)];
+  const fractionNumerator = randomWhole(1, fractionDenominator - 1);
+  const fractionAddend = randomWhole(1, fractionDenominator - 1);
+  const equationAnswer = equationRight;
+  const rectangleAnswer = 2 * (rectangleLength + rectangleWidth);
+  const fractionAnswer = formatFraction(fractionNumerator + fractionAddend, fractionDenominator);
+  return [
+    { prompt: `Solve: x + ${equationConstant} = ${equationConstant} + ${equationRight}`, answer: String(equationAnswer), explanation: `Add the constants on the right: ${equationConstant} + ${equationRight} = ${equationConstant + equationRight}, then subtract ${equationConstant} from both sides. So x = ${equationAnswer}.` },
+    { prompt: `A rectangle is ${rectangleLength} units long and ${rectangleWidth} units wide. What is its perimeter?`, answer: String(rectangleAnswer), explanation: `Use 2 × (length + width): 2 × (${rectangleLength} + ${rectangleWidth}) = ${rectangleAnswer} units.` },
+    { prompt: `What is ${fractionNumerator}/${fractionDenominator} + ${fractionAddend}/${fractionDenominator}? Give your answer as a fraction.`, answer: fractionAnswer, explanation: `The denominators already match, so add the numerators: ${fractionNumerator}/${fractionDenominator} + ${fractionAddend}/${fractionDenominator} = ${fractionNumerator + fractionAddend}/${fractionDenominator} = ${fractionAnswer}.` }
+  ];
+}
 
 function updateWallet() {
   coinBalance.textContent = coins;
@@ -27,8 +46,7 @@ function updateWallet() {
 
 function setBackground(color) {
   document.documentElement.style.setProperty("--paper", color);
-  backgroundColor.value = color;
-  colorSwatch.style.background = color;
+  colorChoices.forEach((choice) => choice.classList.toggle("active", choice.dataset.color === color));
   localStorage.setItem("proofline-background", color);
 }
 
@@ -320,4 +338,92 @@ function solve() {
   const result = solveQuestion(questionInput.value);
   if (result) return render(result);
   emptyState.hidden = true;
-  so
+  solution.hidden = false;
+  solution.innerHTML = `<div class="solution-head"><div><p class="solution-kicker">let's unpack that</p><h2>One more detail needed</h2></div><div class="answer-value">?</div></div><p class="steps-title">Try a supported format</p><p class="error">I can patiently walk through word problems, fractions, geometry, percentages, and equations. Try <strong>Mia has 7 stickers and gets 5 more</strong>, <strong>3/4 + 1/8</strong>, or <strong>4x − 9 = 2x + 7</strong>.</p>`;
+}
+
+function answersMatch(input, expected) {
+  return input.toLowerCase().replace(/\s+/g, "").replace(/units?/g, "") === expected;
+}
+
+function renderQuizQuestion() {
+  const question = quizQuestions[quizIndex];
+  quizPanel.hidden = false;
+  emptyState.hidden = true;
+  solution.hidden = true;
+  quizPanel.innerHTML = `<p class="quiz-kicker">knowledge check</p><p class="quiz-progress">QUESTION ${quizIndex + 1} OF ${quizQuestions.length}</p><h2 class="quiz-question">${question.prompt}</h2><form class="quiz-form" id="quiz-form"><input class="quiz-input" id="quiz-input" autocomplete="off" placeholder="Your answer" aria-label="Your answer" /><button class="quiz-submit" type="submit">Check answer</button></form>`;
+  quizPanel.querySelector("#quiz-input").focus();
+  quizPanel.querySelector("#quiz-form").addEventListener("submit", (event) => {
+    event.preventDefault();
+    if (quizAnswered) return;
+    quizAnswered = true;
+    const input = quizPanel.querySelector("#quiz-input").value.trim();
+    const correct = answersMatch(input, question.answer);
+    if (correct) quizScore += 1;
+    quizPanel.querySelector("#quiz-form").hidden = true;
+    quizPanel.insertAdjacentHTML("beforeend", `<p class="quiz-feedback"><strong>${correct ? "Correct." : `The answer is ${question.answer}.`}</strong> ${question.explanation}</p><button class="quiz-next" id="quiz-next" type="button">${quizIndex === quizQuestions.length - 1 ? "See my score" : "Next question ↗"}</button>`);
+    quizPanel.querySelector("#quiz-next").addEventListener("click", () => {
+      if (quizIndex === quizQuestions.length - 1) return renderQuizSummary();
+      quizIndex += 1;
+      quizAnswered = false;
+      renderQuizQuestion();
+    });
+  });
+}
+
+function renderQuizSummary() {
+  coins += 100;
+  localStorage.setItem("proofline-coins", coins);
+  updateWallet();
+  quizPanel.innerHTML = `<p class="quiz-kicker">test complete</p><div class="quiz-score">${quizScore} / ${quizQuestions.length}</div><p class="quiz-summary">${quizScore === quizQuestions.length ? "Excellent work. You showed a strong handle on the recent topics." : "Good effort. Review the explanations, then try the test again to sharpen your skills."}</p><button class="quiz-next" id="quiz-restart" type="button">Try again ↗</button>`;
+  quizPanel.querySelector("#quiz-restart").addEventListener("click", startQuiz);
+}
+
+function startQuiz() {
+  quizIndex = 0;
+  quizScore = 0;
+  quizAnswered = false;
+  quizQuestions = createQuizQuestions();
+  renderQuizQuestion();
+}
+
+function closeColorMenu() {
+  colorMenu.classList.remove("is-open");
+}
+
+colorMenuToggle.addEventListener("click", (event) => {
+  event.stopPropagation();
+  colorMenu.classList.toggle("is-open");
+});
+
+document.addEventListener("click", (event) => {
+  if (!colorMenu.contains(event.target)) closeColorMenu();
+});
+
+colorChoices.forEach((choice) => choice.addEventListener("click", () => {
+  if (choice.dataset.color === savedColor) return closeColorMenu();
+  if (coins < 10) return closeColorMenu();
+  coins -= 10;
+  savedColor = choice.dataset.color;
+  localStorage.setItem("proofline-coins", coins);
+  updateWallet();
+  setBackground(savedColor);
+  closeColorMenu();
+}));
+
+quizLaunch.addEventListener("click", startQuiz);
+
+questionForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  solve();
+});
+questionInput.addEventListener("keydown", (event) => {
+  if ((event.key === "Enter" || event.code === "Enter") && !event.shiftKey) {
+    event.preventDefault();
+    solve();
+  }
+});
+document.querySelectorAll(".suggestion").forEach((button) => button.addEventListener("click", () => {
+  questionInput.value = button.dataset.question;
+  questionInput.focus();
+}));
